@@ -1,0 +1,24 @@
+Task outline is, Enhancing Chrome Extension using below steps,
+
+Prerequisite,
+
+1) Choose 3rd party GET API which is free and gives array of string as response.
+2) Choose Cloud Database that is free to setup and easy to integrate for development purpose.
+
+Now, follow below steps to enhance chrome-message-feed,
+
+1) Call above API initially to get all records.
+
+2) Save first 25 records in IndexedDB (for local caching) and save all records on selected Cloud Database (for persistent storage). Use webhooks to send the data to the Cloud Database.
+
+3) Implement a retrieval function that fetches 25 records from IndexedDB initially for a faster respnose and when data is not available in the IndexedDB, it should fetch it from selected Cloud Database. When user scrolls to see more records, it should lazily load messages from Cloud Database.
+
+5) Create a webpage that can initially display first 25 records using retrieval function given in step 3.
+
+Additional consideration,
+
+- Appropriately structure the data in IndexedDB and Cloud Database for efficient storage and retrieval.
+- Handle any authentication and security requirements of the Cloud Database.
+- Handle error handling cases where data fetching, storing, or displaying fails. Log these errors on console.
+- Ensure the application is secure and data integrity is maintained.
+- Document this code and the process flow with markup file and diagram.

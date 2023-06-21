@@ -1,0 +1,13 @@
+{
+    "manifest_version": 2,
+    "name": "Chrome Message Feed",
+    "version": "1.0",
+    "description": "Display the latest messages in a feed.",
+    "browser_action": {
+      "default_popup": "popup.html"
+    },
+    "permissions": [
+      "storage"
+    ]
+  }
+  
