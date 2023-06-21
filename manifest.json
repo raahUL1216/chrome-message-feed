@@ -1,13 +1,21 @@
 {
-    "manifest_version": 2,
-    "name": "Chrome Message Feed",
-    "version": "1.0",
-    "description": "Display the latest messages in a feed.",
-    "browser_action": {
-      "default_popup": "popup.html"
-    },
-    "permissions": [
-      "storage"
-    ]
+  "manifest_version": 3,
+  "name": "Message Feed",
+  "description": "Show message feed to user",
+  "version": "1.0",
+  "permissions": ["storage", "tabs"],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "action": {
+    "default_title": "User Feed",
+    "default_popup": "popup/popup.html",
+    "default_icon": "logo/icon16.png"
+
+  },
+  "icons": {
+    "16": "logo/icon16.png",
+    "48": "logo/icon48.png",
+    "128": "logo/icon128.png"
   }
-  
+}
