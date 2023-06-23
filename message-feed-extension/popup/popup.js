@@ -23,19 +23,23 @@ function openNewTab() {
  * @returns bool
  */
 async function hasMessagesInLocalDB() {
-  return connectIndexedDB().then((db) => {
-    const transaction = db.transaction("messages", "readonly");
-    const objectStore = transaction.objectStore("messages");
-    const countRequest = objectStore.count();
+  return new Promise((resolve, reject) => {
+    connectIndexedDB().then((db) => {
+      const transaction = db.transaction("messages", "readonly");
+      const objectStore = transaction.objectStore("messages");
+      const countRequest = objectStore.count();
 
-    countRequest.onsuccess = () => {
-      const recordCount = countRequest.result;
-      return recordCount > 0 ? true : false;
-    };
+      countRequest.onsuccess = () => {
+        const recordCount = countRequest.result;
+        resolve(recordCount > 0);
+      };
 
-    countRequest.onerror = () => {
-      throw new Error(countRequest.error);
-    };
+      countRequest.onerror = () => {
+        reject(countRequest.error);
+      };
+    }).catch((error) => {
+      reject(error);
+    });
   });
 }
 
@@ -50,7 +54,7 @@ async function loadMessages() {
   await cacheMessages(messages.slice(0, 25));
 
   // send messages to firestore using webhooks
-  storeMessagesInFireStore(messages);
+  await storeMessagesInFireStore(messages);
 }
 
 /**
@@ -163,7 +167,7 @@ async function storeMessagesInFireStore(messages) {
   })
     .then((response) => {
       if (response.ok) {
-        console.log(response.result);
+        console.log(response);
       } else {
         console.error("Error saving message");
       }
