@@ -3,13 +3,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("scroll", async () => {
     if (isScrollAtBottom()) {
       const pageStart = document.querySelectorAll(".user-message").length;
-        pageSize = 25;
-  
+      pageSize = 25;
+
       await lazyLoadMessages(pageStart, pageSize);
     }
   });
 
-  await loadInitialMessages();
+  const messagesAvailable = await hasMessagesInLocalDB();
+
+  if (messagesAvailable) {
+    await loadInitialMessages();
+  } else {
+    await lazyLoadMessages(0, 10);
+  }
 });
 
 /**
@@ -43,6 +49,33 @@ async function connectIndexedDB() {
 }
 
 /**
+ * check if indexedDB has any cached results
+ * @returns bool
+ */
+async function hasMessagesInLocalDB() {
+  return new Promise((resolve, reject) => {
+    connectIndexedDB()
+      .then((db) => {
+        const transaction = db.transaction("messages", "readonly");
+        const objectStore = transaction.objectStore("messages");
+        const countRequest = objectStore.count();
+
+        countRequest.onsuccess = () => {
+          const recordCount = countRequest.result;
+          resolve(recordCount > 0);
+        };
+
+        countRequest.onerror = () => {
+          reject(countRequest.error);
+        };
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+/**
  * loads initial user messages from local db
  */
 async function loadInitialMessages() {
@@ -67,8 +100,8 @@ async function loadInitialMessages() {
 
 /**
  * lazy load more messages when the user scrolls to the bottom
- * @param {*} pageStart 
- * @param {*} pageSize 
+ * @param {*} pageStart
+ * @param {*} pageSize
  */
 async function lazyLoadMessages(pageStart, pageSize) {
   showLoader();
@@ -76,7 +109,7 @@ async function lazyLoadMessages(pageStart, pageSize) {
   const messages = await retrieveMessages(pageStart, pageSize);
 
   if (!messages.length) {
-    alert('Thats all messages you have for now');
+    alert("Thats all messages you have for now");
   }
 
   messages.forEach((message) => {
@@ -88,9 +121,9 @@ async function lazyLoadMessages(pageStart, pageSize) {
 
 /**
  * retrive remaining messages from firestore
- * @param {*} pageStart 
- * @param {*} pageSize 
- * @returns 
+ * @param {*} pageStart
+ * @param {*} pageSize
+ * @returns
  */
 async function retrieveMessages(pageStart, pageSize) {
   const webhookURL = "https://us-central1-messagefeed-946a4.cloudfunctions.net";
@@ -102,9 +135,9 @@ async function retrieveMessages(pageStart, pageSize) {
     },
     body: JSON.stringify({ pageStart, pageSize }),
   })
-    .then(response => response.json())
+    .then((response) => response.json())
     .then((response) => {
-        return response;
+      return response;
     })
     .catch((error) => {
       console.error("Error retrieving message", error);
@@ -127,7 +160,7 @@ function renderMessage(message) {
 
 /**
  * check if the user has scrolled to the bottom of the page
- * @returns 
+ * @returns
  */
 function isScrollAtBottom() {
   const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
@@ -136,12 +169,12 @@ function isScrollAtBottom() {
 
 // Show the loader while fetching messages
 function showLoader() {
-  const loaderContainer = document.querySelector('.loader-container');
-  loaderContainer.style.display = 'flex';
+  const loaderContainer = document.querySelector(".loader-container");
+  loaderContainer.style.display = "flex";
 }
 
 // Hide the loader after fetching messages
 function hideLoader() {
-  const loaderContainer = document.querySelector('.loader-container');
-  loaderContainer.style.display = 'none';
+  const loaderContainer = document.querySelector(".loader-container");
+  loaderContainer.style.display = "none";
 }
