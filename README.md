@@ -10,6 +10,9 @@
 
 ## Webhooks
 
+Refer to
+[Firebase cloud function](https://firebase.google.com/docs/functions/get-started?gen=1st) to setup webhooks
+
 Go to webhooks directory
 > cd firebase-webhooks/functions
 
