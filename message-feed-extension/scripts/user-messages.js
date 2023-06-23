@@ -71,15 +71,19 @@ async function loadInitialMessages() {
  * @param {*} pageSize 
  */
 async function lazyLoadMessages(pageStart, pageSize) {
+  showLoader();
+
   const messages = await retrieveMessages(pageStart, pageSize);
 
   if (!messages.length) {
-    alert('Thats all messages you have for now')
+    alert('Thats all messages you have for now');
   }
 
   messages.forEach((message) => {
     renderMessage(message);
   });
+
+  hideLoader();
 }
 
 /**
@@ -128,4 +132,16 @@ function renderMessage(message) {
 function isScrollAtBottom() {
   const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
   return scrollTop + clientHeight >= scrollHeight;
+}
+
+// Show the loader while fetching messages
+function showLoader() {
+  const loaderContainer = document.querySelector('.loader-container');
+  loaderContainer.style.display = 'flex';
+}
+
+// Hide the loader after fetching messages
+function hideLoader() {
+  const loaderContainer = document.querySelector('.loader-container');
+  loaderContainer.style.display = 'none';
 }

@@ -48,14 +48,14 @@ exports.getMessages = functions.https.onRequest(async (req, res) => {
     let { pageStart, pageSize } = req.body;
 
     pageStart = pageStart || 0;
-    pageSize = pageSize | 10;
+    pageSize = pageSize || 10;
 
     const messagesRef = getFirestore().collection("messages");
 
     // get starting document
     const startDoc = await messagesRef
       .orderBy('timestamp')
-      .limit(pageStart + 1)
+      .limit(pageStart)
       .get()
       .then((snapshot) => {
         const docs = snapshot.docs;

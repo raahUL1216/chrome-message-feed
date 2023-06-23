@@ -165,12 +165,9 @@ async function storeMessagesInFireStore(messages) {
     },
     body: JSON.stringify({ messages }),
   })
+    .then(response => response.json())
     .then((response) => {
-      if (response.ok) {
         console.log(response);
-      } else {
-        console.error("Error saving message");
-      }
     })
     .catch((error) => {
       console.error("Error saving message", error);
