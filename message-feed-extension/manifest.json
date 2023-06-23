@@ -3,7 +3,7 @@
   "name": "Message Feed",
   "description": "Show messages to user",
   "version": "1.0",
-  "permissions": ["tabs", "https://baconipsum.com/api/*"],
+  "permissions": ["tabs"],
   "background": {
     "service_worker": "background.js"
   },

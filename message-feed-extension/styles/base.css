@@ -24,14 +24,16 @@ body {
     margin: 1rem;
     padding-left: 1.5rem;
 
-    background: linear-gradient(135deg, #333333, #666666);
+    background: #333333;
 }
 
 .message-container>li {
     padding: 1rem;
     margin: 1rem;
 
-    background: linear-gradient(135deg, #333333, #666666);
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #333333, #565656);
 }
 
 /* loader */

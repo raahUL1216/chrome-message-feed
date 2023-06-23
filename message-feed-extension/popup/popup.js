@@ -68,7 +68,7 @@ async function getMessages(totalMessages) {
   return fetch(apiURL)
     .then((response) => response.json())
     .then((messages) => {
-      //   console.log(messages);
+      console.log('Retrieved messages from 3rd party API successfully');
       return messages;
     })
     .catch((error) => {
