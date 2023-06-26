@@ -66,10 +66,12 @@ async function hasMessagesInLocalDB() {
         };
 
         countRequest.onerror = () => {
+          console.error(countRequest.error);
           reject(countRequest.error);
         };
       })
       .catch((error) => {
+        console.error(error);
         reject(error);
       });
   });
@@ -140,7 +142,9 @@ async function retrieveMessages(pageStart, pageSize) {
       return response;
     })
     .catch((error) => {
+      alert('Error while getting messages. Please try again in sometime.')
       console.error("Error retrieving message", error);
+      hideLoader();
     });
 }
 

@@ -51,10 +51,12 @@ async function loadMessages() {
   const totalMessages = 200;
   const messages = await getMessages(totalMessages);
 
-  await cacheMessages(messages.slice(0, 25));
-
-  // send messages to firestore using webhooks
-  await storeMessagesInFireStore(messages);
+  if (Array.isArray(messages) && messages.length > 0) {
+    await cacheMessages(messages.slice(0, 25));
+  
+    // send messages to firestore using webhooks
+    await storeMessagesInFireStore(messages);
+  }
 }
 
 /**
@@ -72,7 +74,8 @@ async function getMessages(totalMessages) {
       return messages;
     })
     .catch((error) => {
-      console.error("Error while getting messages from API: ", error);
+      alert('Error while getting messages from API.');
+      console.error(error);
     });
 }
 
