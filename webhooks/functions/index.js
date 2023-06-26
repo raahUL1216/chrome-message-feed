@@ -59,7 +59,7 @@ exports.addMessages = functions.https.onRequest(async (req, res) => {
           });
       }
 
-      res.json({ result: `Messages added successfully.` });
+      res.json({ result: `Messages added to firestore successfully.` });
     } catch (error) {
       console.error("Error adding messages:", error);
       res
